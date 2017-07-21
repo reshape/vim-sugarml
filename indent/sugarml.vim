@@ -1,7 +1,7 @@
 " Vim indent file
-" Language: Pug
-" Maintainer: Joshua Borton
-" Credits: Tim Pope (vim-pug)
+" Language: SugarML
+" Maintainer: Caleb Eby
+" Credits: Joshua Borton, Tim Pope (vim-pug)
 " Last Change: 2010 Sep 22
 
 if exists("b:did_indent")
@@ -12,25 +12,25 @@ unlet! b:did_indent
 let b:did_indent = 1
 
 setlocal autoindent
-setlocal indentexpr=GetPugIndent()
+setlocal indentexpr=GetSugarMLIndent()
 setlocal indentkeys=o,O,*<Return>,},],0),!^F
 
 " Only define the function once.
-if exists("*GetPugIndent")
+if exists("*GetSugarMLIndent")
   finish
 endif
 
 let s:attributes = '\%((.\{-\})\)'
 let s:tag = '\([%.#][[:alnum:]_-]\+\|'.s:attributes.'\)*[<>]*'
 
-if !exists('g:pug_self_closing_tags')
-  let g:pug_self_closing_tags = 'meta|link|img|hr|br|input'
+if !exists('g:sugarml_self_closing_tags')
+  let g:sugarml_self_closing_tags = 'meta|link|img|hr|br|input'
 endif
 
 setlocal formatoptions+=r
 setlocal comments+=n:\|
 
-function! GetPugIndent()
+function! GetSugarMLIndent()
   let lnum = prevnonblank(v:lnum-1)
   if lnum == 0
     return 0
@@ -52,15 +52,13 @@ function! GetPugIndent()
     return indent
   elseif line =~ '^/\%(\[[^]]*\]\)\=$'
     return increase
-  elseif line =~ '^\%(if\|else\|unless\|for\|each\|block\|mixin\|append\|case\|when\)'
-    return increase
   elseif line =~ '^'.s:tag.'[&!]\=[=~-].*,\s*$'
     return increase
   elseif line == '-#'
     return increase
-  elseif line =~? '^\v%('.g:pug_self_closing_tags.')>'
+  elseif line =~? '^\v%('.g:sugarml_self_closing_tags.')>'
     return indent
-  elseif group =~? '\v^%(pugAttributesDelimiter|pugClass|pugId|htmlTagName|htmlSpecialTagName|pugFilter|pugTagBlockChar)$'
+  elseif group =~? '\v^%(sugarmlAttributesDelimiter|sugarmlClass|sugarmlId|htmlTagName|htmlSpecialTagName|sugarmlTagBlockChar)$'
     return increase
   else
     return indent
